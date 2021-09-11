@@ -3,7 +3,7 @@ package com.binance.api.client;
 import com.binance.api.client.domain.account.Account;
 import com.binance.api.client.domain.account.DepositAddress;
 import com.binance.api.client.domain.account.DepositHistory;
-import com.binance.api.client.domain.account.NewOrder;
+import com.binance.api.client.domain.account.NewOrderr;
 import com.binance.api.client.domain.account.NewOrderResponse;
 import com.binance.api.client.domain.account.Order;
 import com.binance.api.client.domain.account.Trade;
@@ -174,7 +174,7 @@ public interface BinanceApiAsyncRestClient {
    * @param order the new order to submit.
    * @param callback the callback that handles the response
    */
-  void newOrder(NewOrder order, BinanceApiCallback<NewOrderResponse> callback);
+  void newOrder(NewOrderr order, BinanceApiCallback<NewOrderResponse> callback);
 
   /**
    * Test new order creation and signature/recvWindow long. Creates and validates a new order but does not send it into the matching engine.
@@ -182,7 +182,7 @@ public interface BinanceApiAsyncRestClient {
    * @param order the new TEST order to submit.
    * @param callback the callback that handles the response
    */
-  void newOrderTest(NewOrder order, BinanceApiCallback<Void> callback);
+  void newOrderTest(NewOrderr order, BinanceApiCallback<Void> callback);
 
   /**
    * Check an order's status (asynchronous).

@@ -10,8 +10,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 /**
  * A trade order to enter or exit a position.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class NewOrder {
+@JsonIgnoreProperties(ignoreUnknown = true) 
+public class NewOrderr {
 
   /**
    * Symbol to place the order on.
@@ -86,7 +86,7 @@ public class NewOrder {
   /**
    * Creates a new order with all required parameters.
    */
-  public NewOrder(String symbol, OrderSide side, OrderType type, TimeInForce timeInForce, String quantity) {
+  public NewOrderr(String symbol, OrderSide side, OrderType type, TimeInForce timeInForce, String quantity) {
     this.symbol = symbol;
     this.side = side;
     this.type = type;
@@ -100,7 +100,7 @@ public class NewOrder {
   /**
    * Creates a new order with all required parameters plus price, which is optional for MARKET orders.
    */
-  public NewOrder(String symbol, OrderSide side, OrderType type, TimeInForce timeInForce, String quantity, String price) {
+  public NewOrderr(String symbol, OrderSide side, OrderType type, TimeInForce timeInForce, String quantity, String price) {
     this(symbol, side, type, timeInForce, quantity);
     this.price = price;
   }
@@ -109,7 +109,7 @@ public class NewOrder {
     return symbol;
   }
 
-  public NewOrder symbol(String symbol) {
+  public NewOrderr symbol(String symbol) {
     this.symbol = symbol;
     return this;
   }
@@ -118,7 +118,7 @@ public class NewOrder {
     return side;
   }
 
-  public NewOrder side(OrderSide side) {
+  public NewOrderr side(OrderSide side) {
     this.side = side;
     return this;
   }
@@ -127,7 +127,7 @@ public class NewOrder {
     return type;
   }
 
-  public NewOrder type(OrderType type) {
+  public NewOrderr type(OrderType type) {
     this.type = type;
     return this;
   }
@@ -136,7 +136,7 @@ public class NewOrder {
     return timeInForce;
   }
 
-  public NewOrder timeInForce(TimeInForce timeInForce) {
+  public NewOrderr timeInForce(TimeInForce timeInForce) {
     this.timeInForce = timeInForce;
     return this;
   }
@@ -145,7 +145,7 @@ public class NewOrder {
     return quantity;
   }
 
-  public NewOrder quantity(String quantity) {
+  public NewOrderr quantity(String quantity) {
     this.quantity = quantity;
     return this;
   }
@@ -154,7 +154,7 @@ public class NewOrder {
     return quoteOrderQty;
   }
 
-  public NewOrder quoteOrderQty(String quoteOrderQty) {
+  public NewOrderr quoteOrderQty(String quoteOrderQty) {
     this.quoteOrderQty = quoteOrderQty;
     return this;
   }
@@ -163,7 +163,7 @@ public class NewOrder {
     return price;
   }
 
-  public NewOrder price(String price) {
+  public NewOrderr price(String price) {
     this.price = price;
     return this;
   }
@@ -172,7 +172,7 @@ public class NewOrder {
     return newClientOrderId;
   }
 
-  public NewOrder newClientOrderId(String newClientOrderId) {
+  public NewOrderr newClientOrderId(String newClientOrderId) {
     this.newClientOrderId = newClientOrderId;
     return this;
   }
@@ -181,7 +181,7 @@ public class NewOrder {
     return stopPrice;
   }
 
-  public NewOrder stopPrice(String stopPrice) {
+  public NewOrderr stopPrice(String stopPrice) {
     this.stopPrice = stopPrice;
     return this;
   }
@@ -190,7 +190,7 @@ public class NewOrder {
     return stopLimitPrice;
   }
 
-  public NewOrder stopLimitPrice(String stopLimitPrice) {
+  public NewOrderr stopLimitPrice(String stopLimitPrice) {
     this.stopLimitPrice = stopLimitPrice;
     return this;
   }
@@ -199,7 +199,7 @@ public class NewOrder {
     return icebergQty;
   }
 
-  public NewOrder icebergQty(String icebergQty) {
+  public NewOrderr icebergQty(String icebergQty) {
     this.icebergQty = icebergQty;
     return this;
   }
@@ -208,7 +208,7 @@ public class NewOrder {
     return newOrderRespType;
   }
 
-  public NewOrder newOrderRespType(NewOrderResponseType newOrderRespType) {
+  public NewOrderr newOrderRespType(NewOrderResponseType newOrderRespType) {
     this.newOrderRespType = newOrderRespType;
     return this;
   }
@@ -217,7 +217,7 @@ public class NewOrder {
     return recvWindow;
   }
 
-  public NewOrder recvWindow(Long recvWindow) {
+  public NewOrderr recvWindow(Long recvWindow) {
     this.recvWindow = recvWindow;
     return this;
   }
@@ -226,7 +226,7 @@ public class NewOrder {
     return timestamp;
   }
 
-  public NewOrder timestamp(long timestamp) {
+  public NewOrderr timestamp(long timestamp) {
     this.timestamp = timestamp;
     return this;
   }
@@ -236,8 +236,8 @@ public class NewOrder {
    *
    * @return a new order which is pre-configured with MARKET as the order type and BUY as the order side.
    */
-  public static NewOrder marketBuy(String symbol, String quantity) {
-    return new NewOrder(symbol, OrderSide.BUY, OrderType.MARKET, null, quantity);
+  public static NewOrderr marketBuy(String symbol, String quantity) {
+    return new NewOrderr(symbol, OrderSide.BUY, OrderType.MARKET, null, quantity);
   }
 
   /**
@@ -245,8 +245,8 @@ public class NewOrder {
    *
    * @return a new order which is pre-configured with MARKET as the order type and SELL as the order side.
    */
-  public static NewOrder marketSell(String symbol, String quantity) {
-    return new NewOrder(symbol, OrderSide.SELL, OrderType.MARKET, null, quantity);
+  public static NewOrderr marketSell(String symbol, String quantity) {
+    return new NewOrderr(symbol, OrderSide.SELL, OrderType.MARKET, null, quantity);
   }
 
   /**
@@ -254,8 +254,8 @@ public class NewOrder {
    *
    * @return a new order which is pre-configured with LIMIT as the order type and BUY as the order side.
    */
-  public static NewOrder limitBuy(String symbol, TimeInForce timeInForce, String quantity, String price) {
-    return new NewOrder(symbol, OrderSide.BUY, OrderType.LIMIT, timeInForce, quantity, price);
+  public static NewOrderr limitBuy(String symbol, TimeInForce timeInForce, String quantity, String price) {
+    return new NewOrderr(symbol, OrderSide.BUY, OrderType.LIMIT, timeInForce, quantity, price);
   }
 
   /**
@@ -263,8 +263,8 @@ public class NewOrder {
    *
    * @return a new order which is pre-configured with LIMIT as the order type and SELL as the order side.
    */
-  public static NewOrder limitSell(String symbol, TimeInForce timeInForce, String quantity, String price) {
-    return new NewOrder(symbol, OrderSide.SELL, OrderType.LIMIT, timeInForce, quantity, price);
+  public static NewOrderr limitSell(String symbol, TimeInForce timeInForce, String quantity, String price) {
+    return new NewOrderr(symbol, OrderSide.SELL, OrderType.LIMIT, timeInForce, quantity, price);
   }
 
   @Override

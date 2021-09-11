@@ -149,14 +149,14 @@ public interface BinanceApiRestClient {
    * @param order the new order to submit.
    * @return a response containing details about the newly placed order.
    */
-  NewOrderResponse newOrder(NewOrder order);
+  NewOrderResponse newOrder(NewOrderr order);
 
   /**
    * Test new order creation and signature/recvWindow long. Creates and validates a new order but does not send it into the matching engine.
    *
    * @param order the new TEST order to submit.
    */
-  void newOrderTest(NewOrder order);
+  void newOrderTest(NewOrderr order);
 
   /**
    * Check an order's status.
@@ -329,4 +329,14 @@ public interface BinanceApiRestClient {
    * @param listenKey listen key that identifies a data stream
    */
   void closeUserDataStream(String listenKey);
+
+  /**
+   * Dribblet history
+   *
+   * @param startTime
+   * @param endTime
+   * @return
+   */
+  DribbletHistory dribbletHistory(Long startTime, Long endTime);
+
 }

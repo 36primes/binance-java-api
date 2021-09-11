@@ -6,6 +6,7 @@ import com.binance.api.client.domain.OrderType;
 import com.binance.api.client.domain.SwapRemoveType;
 import com.binance.api.client.domain.TimeInForce;
 import com.binance.api.client.domain.account.*;
+import com.binance.api.client.domain.account.Trade;
 import com.binance.api.client.domain.account.request.CancelOrderListResponse;
 import com.binance.api.client.domain.account.request.CancelOrderResponse;
 import com.binance.api.client.domain.event.ListenKey;
@@ -53,7 +54,7 @@ public interface BinanceApiService {
     Call<List<AggTrade>> getAggTrades(@Query("symbol") String symbol, @Query("fromId") String fromId, @Query("limit") Integer limit,
                                       @Query("startTime") Long startTime, @Query("endTime") Long endTime);
 
-    @GET("/api/v1/klines")
+    @GET("/api/v3/klines")
     Call<List<Candlestick>> getCandlestickBars(@Query("symbol") String symbol, @Query("interval") String interval, @Query("limit") Integer limit,
                                                @Query("startTime") Long startTime, @Query("endTime") Long endTime);
 
@@ -329,6 +330,10 @@ public interface BinanceApiService {
             @Query("swapId") String swapId,
             @Query("recvWindow") Long recvWindow,
             @Query("timestamp") Long timestamp);
+
+    @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+    @GET("/sapi/v1/asset/dribblet")
+    Call<DribbletHistory> dribbletsHistory(@Query("startTime") Long startTime, @Query("endTime") Long endTime, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
 
 }

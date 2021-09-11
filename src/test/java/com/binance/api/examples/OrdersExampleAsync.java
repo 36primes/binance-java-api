@@ -8,8 +8,8 @@ import com.binance.api.client.domain.account.request.CancelOrderRequest;
 import com.binance.api.client.domain.account.request.OrderRequest;
 import com.binance.api.client.domain.account.request.OrderStatusRequest;
 
-import static com.binance.api.client.domain.account.NewOrder.limitBuy;
-import static com.binance.api.client.domain.account.NewOrder.marketBuy;
+import static com.binance.api.client.domain.account.NewOrderr.limitBuy;
+import static com.binance.api.client.domain.account.NewOrderr.marketBuy;
 
 /**
  * Examples on how to place orders, cancel them, and query account information.

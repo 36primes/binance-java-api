@@ -4,6 +4,7 @@ import com.binance.api.client.BinanceApiRestClient;
 import com.binance.api.client.config.BinanceApiConfig;
 import com.binance.api.client.constant.BinanceApiConstants;
 import com.binance.api.client.domain.account.*;
+import com.binance.api.client.domain.account.Trade;
 import com.binance.api.client.domain.account.request.*;
 import com.binance.api.client.domain.general.Asset;
 import com.binance.api.client.domain.general.ExchangeInfo;
@@ -115,7 +116,7 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
 	}
 
 	@Override
-	public NewOrderResponse newOrder(NewOrder order) {
+	public NewOrderResponse newOrder(NewOrderr order) {
 		final Call<NewOrderResponse> call;
 		if (order.getQuoteOrderQty() == null) {
 			call = binanceApiService.newOrder(order.getSymbol(), order.getSide(), order.getType(),
@@ -132,7 +133,7 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
 	}
 
 	@Override
-	public void newOrderTest(NewOrder order) {
+	public void newOrderTest(NewOrderr order) {
 		executeSync(binanceApiService.newOrderTest(order.getSymbol(), order.getSide(), order.getType(),
 				order.getTimeInForce(), order.getQuantity(), order.getPrice(), order.getNewClientOrderId(),
 				order.getStopPrice(), order.getIcebergQty(), order.getNewOrderRespType(), order.getRecvWindow(),
@@ -277,5 +278,11 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
 	@Override
 	public void closeUserDataStream(String listenKey) {
 		executeSync(binanceApiService.closeAliveUserDataStream(listenKey));
+	}
+
+	@Override
+	public DribbletHistory dribbletHistory(Long startTime, Long endTime){
+		return executeSync(binanceApiService.dribbletsHistory(startTime, endTime, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
+				System.currentTimeMillis()));
 	}
 }
