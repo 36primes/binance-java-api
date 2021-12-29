@@ -164,6 +164,12 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
 	}
 
 	@Override
+	public List<Order> cancelOpenOrders(OrderRequest orderRequest) {
+		return executeSync(binanceApiService.cancelOpenOrders(orderRequest.getSymbol(), orderRequest.getRecvWindow(),
+				orderRequest.getTimestamp()));
+	}
+
+	@Override
 	public List<Order> getAllOrders(AllOrdersRequest orderRequest) {
 		return executeSync(binanceApiService.getAllOrders(orderRequest.getSymbol(), orderRequest.getOrderId(),
 				orderRequest.getLimit(), orderRequest.getRecvWindow(), orderRequest.getTimestamp()));
