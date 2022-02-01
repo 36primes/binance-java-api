@@ -148,6 +148,18 @@ public class OrderTradeUpdateEvent {
   @JsonProperty("Q")
   private String quoteOrderQty;
 
+  /**
+   * Price.
+   */
+  @JsonProperty("P")
+  private String stopPrice;
+
+  /**
+   * Iceberg Qty.
+   */
+  @JsonProperty("F")
+  private String icebergQty;
+
   public String getEventType() {
     return eventType;
   }
@@ -340,6 +352,22 @@ public class OrderTradeUpdateEvent {
     this.quoteOrderQty = quoteOrderQty;
   }
 
+  public String getStopPrice() {
+    return stopPrice;
+  }
+
+  public void setStopPrice(String stopPrice) {
+    this.stopPrice = stopPrice;
+  }
+
+  public String getIcebergQty() {
+    return icebergQty;
+  }
+
+  public void setIcebergQty(String icebergQty) {
+    this.icebergQty = icebergQty;
+  }
+
   @Override
   public String toString() {
     return new ToStringBuilder(this, BinanceApiConstants.TO_STRING_BUILDER_STYLE)
@@ -352,6 +380,7 @@ public class OrderTradeUpdateEvent {
         .append("timeInForce", timeInForce)
         .append("originalQuantity", originalQuantity)
         .append("price", price)
+        .append("stopPrice", stopPrice)
         .append("executionType", executionType)
         .append("orderStatus", orderStatus)
         .append("orderRejectReason", orderRejectReason)
@@ -367,6 +396,7 @@ public class OrderTradeUpdateEvent {
         .append("cumulativeQuoteQty", cumulativeQuoteQty)
         .append("lastQuoteQty", lastQuoteQty)
         .append("quoteOrderQty", quoteOrderQty)
+        .append("icebergQty", icebergQty)
         .toString();
   }
 }
