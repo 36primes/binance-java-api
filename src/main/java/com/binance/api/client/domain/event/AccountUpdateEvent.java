@@ -25,9 +25,20 @@ public class AccountUpdateEvent {
   @JsonProperty("E")
   private long eventTime;
 
+  @JsonProperty("u")
+  private long lastAccountUpdate; //Time of last account update
+
   @JsonProperty("B")
   @JsonDeserialize(contentUsing = AssetBalanceDeserializer.class)
   private List<AssetBalance> balances;
+
+  public long getLastAccountUpdate() {
+    return lastAccountUpdate;
+  }
+
+  public void setLastAccountUpdate(long lastAccountUpdate) {
+    this.lastAccountUpdate = lastAccountUpdate;
+  }
 
   public String getEventType() {
     return eventType;
