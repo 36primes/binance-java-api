@@ -11,7 +11,7 @@ This repository uses GitHub Actions to automatically build, test, and publish Ma
 This workflow runs automatically on:
 - **Push** to `main`, `master`, or `develop` branches
 - **Pull Requests** to `main`, `master`, or `develop` branches
-- **Manual trigger** via GitHub Actions UI (with optional release creation)
+- **Manual trigger** via GitHub Actions UI (with optional GitHub Release creation)
 
 #### What it does:
 
@@ -23,37 +23,57 @@ This workflow runs automatically on:
    - Uploads JAR artifacts (available for 30 days)
    - Uploads test results
 
-2. **Publish Job** (only on main/master push or manual release):
-   - Publishes artifacts to GitHub Packages
-   - Creates a GitHub Release (if triggered manually with release flag)
-   - Automatically updates version numbers
-   - Creates git tags
+2. **Publish Job** (only on main/master push or manual trigger):
+   - Publishes artifacts to GitHub Packages (Maven repository)
+   - Optionally creates a GitHub Release with JAR files attached
 
-## Creating a Release
+## Version Management
 
-### Option 1: Manual Workflow Dispatch
+**You manage versions manually in `pom.xml`** - the workflow simply builds and publishes whatever version is defined there.
 
-1. Go to **Actions** tab in GitHub
-2. Select **Build and Publish** workflow
-3. Click **Run workflow**
-4. Set parameters:
-   - `release`: `true`
-   - `release_version`: (optional) e.g., `1.0.1.8` - if not provided, removes `-SNAPSHOT` from current version
-5. Click **Run workflow**
+### Releasing a New Version
 
-The workflow will:
-- Update `pom.xml` to the release version
-- Build and publish to GitHub Packages
-- Create a GitHub Release with the JAR file
-- Tag the release (e.g., `v1.0.1.8`)
-- Automatically bump to next development version (e.g., `1.0.1.9-SNAPSHOT`)
-- Push changes and tags back to the repository
+1. **Update version in `pom.xml`**:
+   - For releases: Change version to `1.0.1.X` (without `-SNAPSHOT`)
+   - For snapshots: Keep version as `1.0.1.X-SNAPSHOT`
 
-### Option 2: Automatic Publishing (Snapshot)
+2. **Commit and push**:
+   ```bash
+   git add pom.xml
+   git commit -m "Bump version to 1.0.1.X"
+   git push
+   ```
 
-When you push to `main` or `master` branch, the workflow automatically:
-- Builds the project
-- Publishes the SNAPSHOT version to GitHub Packages
+3. **Create a GitHub Release** (optional):
+   - Go to **Actions** tab in GitHub
+   - Select **Build and Publish** workflow
+   - Click **Run workflow**
+   - Check the **Create a GitHub Release** checkbox
+   - Click **Run workflow**
+
+   This will create a GitHub Release with the JAR files attached and a tag `v1.0.1.X`.
+
+4. **Prepare next development version**:
+   ```bash
+   # Update pom.xml to next snapshot version
+   # e.g., 1.0.1.10-SNAPSHOT
+   git add pom.xml
+   git commit -m "Prepare next development version 1.0.1.10-SNAPSHOT"
+   git push
+   ```
+
+## What Gets Published
+
+### Automatic Publishing (on every push to main/master):
+
+- **Artifacts to GitHub Packages**: Whatever version is in `pom.xml` gets published
+- **SNAPSHOT versions**: Continuously updated as you push changes
+- **Release versions**: Published once when you push the release version
+
+### Manual Release Creation:
+
+- **GitHub Release**: Creates a release with tag `vX.Y.Z` and attaches JAR files
+- **Release Notes**: Auto-generated from commits since last release
 
 ## Consuming Artifacts from Other Repositories
 
@@ -79,7 +99,7 @@ To use this library in another Maven project within your organization:
 <dependency>
   <groupId>com.binance.api</groupId>
   <artifactId>binance-api-client</artifactId>
-  <version>1.0.1.8</version>
+  <version>1.0.1.9</version>
 </dependency>
 ```
 
@@ -137,7 +157,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.binance.api:binance-api-client:1.0.1.8'
+    implementation 'com.binance.api:binance-api-client:1.0.1.9'
 }
 ```
 
@@ -162,8 +182,9 @@ GitHub Actions automatically provides `GITHUB_TOKEN` with appropriate permission
 After each build, the following artifacts are available:
 
 1. **GitHub Packages** (Maven repository):
-   - Permanent storage for releases
-   - SNAPSHOT versions
+   - Permanent storage for all published versions
+   - SNAPSHOT versions are continuously updated
+   - Release versions are immutable
    - Accessible via Maven/Gradle dependency management
 
 2. **GitHub Actions Artifacts** (temporary):
@@ -171,16 +192,45 @@ After each build, the following artifacts are available:
    - Test results (30-day retention)
    - Downloadable from Actions runs
 
-3. **GitHub Releases**:
-   - Created for tagged releases
+3. **GitHub Releases** (optional):
+   - Created manually via workflow dispatch
    - Contains JAR files as release assets
    - Permanent storage with release notes
+   - Tagged with version number (e.g., `v1.0.1.9`)
 
-## Version Management
+## Workflow Comparison
 
-- **Development**: `X.Y.Z.N-SNAPSHOT` (auto-published on main branch push)
-- **Release**: `X.Y.Z.N` (created via manual workflow dispatch)
-- **Next Development**: Automatically incremented to `X.Y.Z.(N+1)-SNAPSHOT`
+### Old Approach (Over-complicated):
+❌ Workflow tries to manage versions  
+❌ Automatic git commits and tags  
+❌ Tag conflicts and push failures  
+❌ Complex version bumping logic  
+
+### New Approach (Simple):
+✅ You manage versions in `pom.xml` manually  
+✅ Workflow just builds and publishes  
+✅ No git manipulation (except optional GitHub Release)  
+✅ Maven handles all artifact management  
+
+## Best Practices
+
+### Development Workflow:
+
+1. **Work on SNAPSHOT versions**: `1.0.1.X-SNAPSHOT`
+2. **Push frequently**: Each push publishes the SNAPSHOT to GitHub Packages
+3. **Other developers get updates**: Pull latest SNAPSHOT version
+
+### Release Workflow:
+
+1. **Remove `-SNAPSHOT` from version** in `pom.xml`
+2. **Commit and push**: Publishes release version
+3. **Run workflow with "Create Release"**: Creates GitHub Release
+4. **Bump to next SNAPSHOT**: Update `pom.xml` to `1.0.1.(X+1)-SNAPSHOT`
+
+### Using SNAPSHOT vs Release:
+
+- **SNAPSHOT**: For active development, constantly changing
+- **Release**: Stable, immutable version for production use
 
 ## Troubleshooting
 
@@ -203,3 +253,6 @@ If you get 401 Unauthorized:
 - Verify Java version compatibility
 - Ensure all dependencies are accessible
 
+### Tag Already Exists Error
+
+This is no longer an issue! The simplified workflow doesn't create tags automatically. Only manual "Create Release" creates tags, and you can choose whether to create a release or not.
