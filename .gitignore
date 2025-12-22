@@ -95,7 +95,8 @@ hs_err_pid*
 target/
 # End of https://www.gitignore.io/api/java,intellij
 
-# Ignore files and folders starting with dot (except gitignore)
+# Ignore files and folders starting with dot (except gitignore and .github)
 .*
 !/.gitignore
+!/.github
 /nbproject/
