@@ -99,13 +99,21 @@ jobs:
           
           echo "RELEASE_VERSION=${RELEASE_VERSION}" >> $GITHUB_ENV
           
-          # Update pom.xml to release version
-          mvn versions:set -DnewVersion=${RELEASE_VERSION} -DgenerateBackupPoms=false
-          
-          # Commit version change
-          git add pom.xml
-          git commit -m "Release version ${RELEASE_VERSION}"
-          git tag -a "v${RELEASE_VERSION}" -m "Release version ${RELEASE_VERSION}"
+          # Check if tag already exists
+          if git ls-remote --tags origin | grep -q "refs/tags/v${RELEASE_VERSION}$"; then
+            echo "TAG_EXISTS=true" >> $GITHUB_ENV
+            echo "Tag v${RELEASE_VERSION} already exists, skipping version update"
+          else
+            echo "TAG_EXISTS=false" >> $GITHUB_ENV
+            
+            # Update pom.xml to release version
+            mvn versions:set -DnewVersion=${RELEASE_VERSION} -DgenerateBackupPoms=false
+            
+            # Commit version change
+            git add pom.xml
+            git commit -m "Release version ${RELEASE_VERSION}" || true
+            git tag -a "v${RELEASE_VERSION}" -m "Release version ${RELEASE_VERSION}"
+          fi
       
       - name: Build and publish to GitHub Packages
         env:
@@ -128,7 +136,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Prepare next development version
-        if: github.event.inputs.release == 'true'
+        if: github.event.inputs.release == 'true' && env.TAG_EXISTS == 'false'
         run: |
           # Calculate next snapshot version
           CURRENT_VERSION="${{ env.RELEASE_VERSION }}"
@@ -145,8 +153,14 @@ jobs:
           git commit -m "Prepare next development version ${NEXT_VERSION}"
       
       - name: Push changes
-        if: github.event.inputs.release == 'true'
+        if: github.event.inputs.release == 'true' && env.TAG_EXISTS == 'false'
         run: |
           git push origin HEAD:${{ github.ref_name }}
           git push origin v${{ env.RELEASE_VERSION }}
+      
+      - name: Skip message
+        if: github.event.inputs.release == 'true' && env.TAG_EXISTS == 'true'
+        run: |
+          echo "⚠️ Tag v${{ env.RELEASE_VERSION }} already exists. Skipping git push."
+          echo "The build and deployment to GitHub Packages was still executed."
 
